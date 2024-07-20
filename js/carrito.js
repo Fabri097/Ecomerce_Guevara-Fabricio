@@ -37,12 +37,12 @@ function cargarProductosCarrito(){
     
                   <div class="carrito-producto-precio">
                     <small>precio</small>
-                    <p>${producto.precio}</p>
+                    <p>$${producto.precio}</p>
                   </div>
     
                   <div class="carrito-producto-subtotal">
                     <small>subtotal</small>
-                    <p>${producto.precio * producto.cantidad}</p>
+                    <p>$${producto.precio * producto.cantidad}</p>
                   </div>
     
                   <button class="carrito-producto-eliminar" id="${producto.id}">
@@ -74,6 +74,24 @@ function actualizarBotonesEliminar() {
 }
 
 function eliminarDelCarrito(e){
+
+  Toastify({
+    text: "Producto eliminado",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top", 
+    position: "right", 
+    stopOnFocus: true, 
+    style: {
+      background: "linear-gradient(to right, #d89797, #961818)",
+      borderRadius: "2rem",
+      textTransform: "upperCase",
+      fontSize: ".75rem"
+    },
+    onClick: function(){} 
+  }).showToast();
+
     const IdBoton = e.currentTarget.id;
     const index = productosEnCarrito.findIndex(producto => producto.id === IdBoton);
     
@@ -86,11 +104,27 @@ function eliminarDelCarrito(e){
 botonVaciar.addEventListener("click", vaciarcarrito);
 
 function vaciarcarrito() {
-  productosEnCarrito.length = 0 ;
-  localStorage.setItem("productos-en-carrito",JSON.stringify (productosEnCarrito));
-  cargarProductosCarrito();
+  
+  Swal.fire({
+    title: "Estas seguro",
+    icon: "question",
+    html: ` Se van a borrar ${productosEnCarrito.reduce((acc, productos) => acc + productos.cantidad, 0)} productos.`,
+    showCloseButton: true,
+    showCancelButton: true,
+    focusConfirm: false,
+    confirmButtonText: ` Si `,
+    cancelButtonText: `No `,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      productosEnCarrito.length = 0 ;
+      localStorage.setItem("productos-en-carrito",JSON.stringify (productosEnCarrito));
+      cargarProductosCarrito();
+    }
+  })
 }
 
+
 function actualizarTotal() {
-  total.innerHTML = productosEnCarrito.reduce((acc, producto)=> acc + (producto.precio * producto.cantidad), 0);
+  const totalCalculado = productosEnCarrito.reduce((acc, producto)=> acc + (producto.precio * producto.cantidad), 0);
+  total.innerText = `$${totalCalculado}`
 }

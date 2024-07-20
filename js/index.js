@@ -17,7 +17,7 @@ let productos = [
       nombre: "bebidas",
       id: "bebidas",
     },
-    precio: 10,
+    precio:10,
   },
   {
     id: "power",
@@ -199,7 +199,7 @@ function cargarProductos(productosElegidos) {
         <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}"/>
             <div class="producto-detalles">
               <h3 class="producto-titulo">${producto.titulo}</h3>
-              <p class="producto-precio">${producto.precio}</p>
+              <p class="producto-precio">$${producto.precio}</p>
               <button class="producto-agregar" id = "${producto.id}">agregar</button>
             </div>
     `;
@@ -256,6 +256,23 @@ if (productosEnCarritoLS) {
 }
 
 function agregarAlCarrito(e) {
+
+  Toastify({
+    text: "Producto agregado",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top", 
+    position: "right", 
+    stopOnFocus: true, 
+    style: {
+      background: "linear-gradient(to right, #d89797, #961818)",
+      borderRadius: "2rem",
+      textTransform: "upperCase",
+      fontSize: ".75rem"
+    },
+    onClick: function(){} 
+  }).showToast();
 
   const IdBoton = e.currentTarget.id;
   const productoAgregado = productos.find((producto) => producto.id === IdBoton);
